@@ -1,5 +1,7 @@
 # 💰 GharKharcha — Family Budget Tracker
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Deepika-2029/kharcha)
+
 React + Node.js se bana ek complete family budget tracking app.
 
 ---
