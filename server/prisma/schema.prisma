@@ -1,0 +1,67 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Family {
+  id            String        @id @default(cuid())
+  name          String
+  monthlyBudget Float         @default(0)
+  createdAt     DateTime      @default(now())
+  users         User[]
+  categories    Category[]
+  goals         Goal[]
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  password     String
+  role         String        @default("member") // admin | member
+  familyId     String?
+  family       Family?       @relation(fields: [familyId], references: [id])
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+}
+
+model Category {
+  id           String        @id @default(cuid())
+  name         String
+  icon         String        @default("📦")
+  budgetLimit  Float         @default(0)
+  color        String        @default("#6366f1")
+  familyId     String
+  family       Family        @relation(fields: [familyId], references: [id])
+  transactions Transaction[]
+}
+
+model Transaction {
+  id          String   @id @default(cuid())
+  amount      Float
+  type        String   // income | expense
+  note        String?
+  date        DateTime @default(now())
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id])
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model Goal {
+  id            String   @id @default(cuid())
+  title         String
+  targetAmount  Float
+  savedAmount   Float    @default(0)
+  deadline      DateTime?
+  familyId      String
+  family        Family   @relation(fields: [familyId], references: [id])
+  createdAt     DateTime @default(now())
+}
