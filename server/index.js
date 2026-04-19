@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const authRoutes = require('./routes/auth');
 const transactionRoutes = require('./routes/transactions');
@@ -22,6 +23,17 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/goals', goalRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/family', familyRoutes);
+
+// Serve static assets in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+  
+  app.get('*', (req, res) => {
+    if (!req.path.startsWith('/api')) {
+      res.sendFile(path.resolve(__dirname, '../client', 'build', 'index.html'));
+    }
+  });
+}
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
