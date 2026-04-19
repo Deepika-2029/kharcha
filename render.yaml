@@ -7,7 +7,7 @@ services:
     name: kharcha-app
     env: node
     plan: free
-    buildCommand: npm run build:client
+    buildCommand: npm run install:all && npm run build:client
     startCommand: npm start
     envVars:
       - key: DATABASE_URL
